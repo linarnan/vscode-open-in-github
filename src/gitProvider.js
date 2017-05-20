@@ -54,7 +54,7 @@ class Bitbucket extends BaseProvider {
 class GitLab extends GitHub {
     webUrl(branch, filePath, line, endLine) {
         if (filePath) {
-            return `${this.baseUrl}/blob/${branch}` + (filePath ? `${filePath}` : '') + (line ? `#L-${line}` : '');
+            return `${this.baseUrl}/blob/${branch}` + (filePath ? `${filePath}` : '') + (line ? `#L${line}` : '');
         }
         return `${this.baseUrl}/tree/${branch}`;
     }
@@ -106,11 +106,8 @@ function gitProvider(remoteUrl) {
     console.log(providerType);
     const gitUrl = gitUrlParse(remoteUrl);
     for (const domain of Object.keys(providers)) {
-        if (domain === gitUrl.resource || domain === gitUrl.source) {
+        if (domain === gitUrl.resource || domain === gitUrl.source || domain.indexOf(providerType) > -1) {
             return new providers[domain](gitUrl);
-        }else if( domain.indexOf(providerType) > -1 ){
-            return new providers[domain](gitUrl);
-        }
     }
     throw new Error('unknown Provider');
 }
